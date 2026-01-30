@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b5d5a" />
+  <title>Flat Condition Checklist</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root { --bg:#0b5d5a; --card:#ffffff; --muted:#6b7280; --ink:#111827; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#f3f4f6; color:var(--ink); }
+    header { background:var(--bg); color:#fff; padding:16px 16px 12px; position:sticky; top:0; z-index:5; }
+    header h1 { margin:0; font-size:18px; }
+    header p { margin:6px 0 0; font-size:12px; opacity:.9; }
+    .wrap { max-width:900px; margin:0 auto; padding:16px; }
+    .card { background:var(--card); border-radius:14px; padding:14px; box-shadow:0 1px 10px rgba(0,0,0,.06); margin-bottom:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .field { flex:1; min-width:220px; }
+    label { display:block; font-size:12px; color:var(--muted); margin:0 0 6px; }
+    input, textarea, select { width:100%; box-sizing:border-box; border:1px solid #e5e7eb; border-radius:10px; padding:10px; font-size:14px; background:#fff; }
+    textarea { min-height:72px; resize:vertical; }
+    .section-title { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 10px; }
+    .section-title h2 { margin:0; font-size:16px; }
+    .pill { font-size:12px; color:#fff; background:var(--bg); padding:4px 10px; border-radius:999px; }
+    .item { display:flex; align-items:flex-start; gap:10px; padding:10px 8px; border-top:1px solid #f0f2f5; }
+    .item:first-of-type { border-top:none; }
+    .item input[type="checkbox"] { width:20px; height:20px; margin-top:2px; }
+    .item .txt { flex:1; }
+    .item .txt .name { font-size:14px; }
+    .item .txt .hint { font-size:12px; color:var(--muted); margin-top:3px; }
+    .item .btn { border:1px solid #e5e7eb; background:#fff; border-radius:10px; padding:8px 10px; font-size:12px; cursor:pointer; }
+    .item .btn:active { transform:scale(.99); }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    button.main { background:var(--bg); color:#fff; border:none; padding:11px 14px; border-radius:12px; font-size:14px; cursor:pointer; }
+    button.alt { background:#fff; border:1px solid #e5e7eb; padding:11px 14px; border-radius:12px; font-size:14px; cursor:pointer; }
+    .small { font-size:12px; color:var(--muted); margin-top:8px; }
+    .danger { color:#b91c1c; }
+    .photo-list { margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:12px; }
+    .footer-space { height:20px; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Flat Condition Checklist</h1>
+  <p>Move-in evidence + move-out protection. Saved on this phone.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label>Tenant name</label>
+        <input id="tenantName" placeholder="e.g., Natacha" />
+      </div>
+      <div class="field">
+        <label>Property address</label>
+        <input id="address" placeholder="Flat address" />
+      </div>
+      <div class="field">
+        <label>Check type</label>
+        <select id="checkType">
+          <option value="move-in">Move-in</option>
+          <option value="move-out">Move-out</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field">
+        <label>Date</label>
+        <input id="date" type="date" />
+      </div>
+      <div class="field">
+        <label>Meter readings (Gas / Electric / Water)</label>
+        <input id="meters" placeholder="e.g., G:12345 E:67890 W:111" />
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field">
+        <label>General notes (anything already damaged / dirty)</label>
+        <textarea id="generalNotes" placeholder="Write any existing issues here..."></textarea>
+      </div>
+    </div>
+
+    <div class="actions" style="margin-top:10px;">
+      <button class="main" id="saveBtn">Save</button>
+      <button class="alt" id="exportBtn">Export report</button>
+      <button class="alt danger" id="resetBtn">Reset checklist</button>
+    </div>
+    <div class="small">
+      Tip: Use “Add photo” on each item to attach a picture (saved on phone). For stronger evidence, also do a video walkthrough.
+    </div>
+  </div>
+
+  <div id="sections"></div>
+  <div class="footer-space"></div>
+</div>
+
+<script>
+  const STORAGE_KEY = "flat_checklist_v1";
+
+  const TEMPLATE = [
+    { title: "Entrance / Hallway", items: [
+      { name: "Front door condition (scratches/dents)", hint: "Take close-up photo if marked." },
+      { name: "Locks & keys tested", hint: "Confirm all keys work." },
+      { name: "Walls & skirting boards", hint: "Look for scuffs, chips, stains." },
+      { name: "Flooring / carpet", hint: "Marks, stains, lifting edges." },
+      { name: "Lights & switches", hint: "Test all." },
+      { name: "Smoke/CO alarms present & working", hint: "Note test result." },
+    ]},
+    { title: "Living Room", items: [
+      { name: "Walls/ceiling (cracks/stains)", hint: "Photograph any cracks." },
+      { name: "Windows open/close properly", hint: "Check handles + seals." },
+      { name: "Curtains/blinds clean & working", hint: "Note missing parts." },
+      { name: "Flooring / carpet condition", hint: "Stains are common deposit deductions." },
+      { name: "Radiator/heating works", hint: "Note if cold." },
+      { name: "Sockets & lights work", hint: "Test multiple sockets." },
+      { name: "Furniture clean & undamaged (if furnished)", hint: "Check sofas/arms for stains." },
+    ]},
+    { title: "Kitchen", items: [
+      { name: "Worktops clean & undamaged", hint: "Chips, burns, swelling." },
+      { name: "Cupboards/drawers clean inside", hint: "Grease, crumbs, smells." },
+      { name: "Sink/taps no leaks", hint: "Run water & check underneath." },
+      { name: "Hob working & clean", hint: "Take photo if stained." },
+      { name: "Oven clean inside", hint: "Most common cleaning charge." },
+      { name: "Extractor fan works", hint: "Turn on & feel suction." },
+      { name: "Fridge clean inside", hint: "Shelves + seals." },
+      { name: "Freezer clean inside", hint: "Ice build-up? Smell?" },
+      { name: "Washing machine clean (seal + drawer)", hint: "Mould in seal = charge risk." },
+      { name: "Dishwasher clean (if any)", hint: "Filter + inside." },
+      { name: "Splashback/tiles clean", hint: "" },
+      { name: "Kitchen floor clean", hint: "" },
+    ]},
+    { title: "Bathroom / WC", items: [
+      { name: "Toilet clean & flushes", hint: "Check seat/hinges." },
+      { name: "Sink clean, no leaks", hint: "" },
+      { name: "Bath/shower clean", hint: "Limescale + stains." },
+      { name: "Sealant/grout condition (mould?)", hint: "Photograph mould or gaps." },
+      { name: "Shower pressure OK", hint: "Note weak flow." },
+      { name: "Mirror & surfaces clean", hint: "" },
+      { name: "Extractor fan works", hint: "Helps avoid mould." },
+      { name: "Bathroom floor clean", hint: "" },
+    ]},
+    { title: "Bedroom(s)", items: [
+      { name: "Walls/ceiling clean", hint: "" },
+      { name: "Flooring / carpet condition", hint: "" },
+      { name: "Windows open/close properly", hint: "" },
+      { name: "Curtains/blinds clean & working", hint: "" },
+      { name: "Radiator/heating works", hint: "" },
+      { name: "Lights & sockets work", hint: "" },
+      { name: "Wardrobe/drawers clean inside (if any)", hint: "" },
+      { name: "Bed/mattress clean (if furnished)", hint: "Take photo of mattress surfaces." },
+    ]},
+    { title: "Storage / Cupboards", items: [
+      { name: "Clean inside", hint: "" },
+      { name: "No damp/mould", hint: "Look at corners/backs." },
+      { name: "Shelving secure", hint: "" },
+    ]},
+    { title: "Utilities", items: [
+      { name: "Boiler working (if accessible)", hint: "Note any error codes." },
+      { name: "Hot water OK", hint: "" },
+      { name: "Heating works in all rooms", hint: "" },
+      { name: "Fuse box accessible", hint: "" },
+      { name: "No visible leaks", hint: "Under sinks, around boiler." },
+    ]},
+    { title: "Move-out extras (deposit protection)", items: [
+      { name: "Oven cleaned", hint: "Inside + trays." },
+      { name: "Bathroom mould removed", hint: "Sealant + grout." },
+      { name: "Fridge/freezer empty & clean", hint: "" },
+      { name: "Carpets hoovered / stains treated", hint: "" },
+      { name: "Floors mopped", hint: "" },
+      { name: "Bulbs replaced", hint: "" },
+      { name: "Rubbish removed", hint: "Bins emptied." },
+      { name: "Keys returned", hint: "" },
+      { name: "Final photos + video taken", hint: "" },
+      { name: "Final meter readings recorded", hint: "" },
+    ]},
+  ];
+
+  function nowISODate() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  function defaultState() {
+    return {
+      meta: {
+        tenantName: "",
+        address: "",
+        checkType: "move-in",
+        date: nowISODate(),
+        meters: "",
+        generalNotes: ""
+      },
+      sections: TEMPLATE.map((s, si) => ({
+        title: s.title,
+        items: s.items.map((it, ii) => ({
+          id: `${si}-${ii}`,
+          name: it.name,
+          hint: it.hint || "",
+          checked: false,
+          notes: "",
+          photos: [] // stores DataURLs
+        }))
+      }))
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      // Basic fallback if template changes:
+      return parsed && parsed.sections ? parsed : defaultState();
+    } catch { return defaultState(); }
+  }
+
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  let state = loadState();
+
+  // Bind meta fields
+  const tenantName = document.getElementById("tenantName");
+  const address = document.getElementById("address");
+  const checkType = document.getElementById("checkType");
+  const date = document.getElementById("date");
+  const meters = document.getElementById("meters");
+  const generalNotes = document.getElementById("generalNotes");
+
+  function syncMetaToUI() {
+    tenantName.value = state.meta.tenantName || "";
+    address.value = state.meta.address || "";
+    checkType.value = state.meta.checkType || "move-in";
+    date.value = state.meta.date || nowISODate();
+    meters.value = state.meta.meters || "";
+    generalNotes.value = state.meta.generalNotes || "";
+  }
+
+  function syncMetaFromUI() {
+    state.meta.tenantName = tenantName.value.trim();
+    state.meta.address = address.value.trim();
+    state.meta.checkType = checkType.value;
+    state.meta.date = date.value;
+    state.meta.meters = meters.value.trim();
+    state.meta.generalNotes = generalNotes.value.trim();
+  }
+
+  function progressForSection(sec) {
+    const total = sec.items.length;
+    const done = sec.items.filter(i => i.checked).length;
+    return { done, total };
+  }
+
+  function render() {
+    syncMetaToUI();
+    const root = document.getElementById("sections");
+    root.innerHTML = "";
+
+    state.sections.forEach((sec, sIndex) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const { done, total } = progressForSection(sec);
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "section-title";
+      titleRow.innerHTML = `<h2>${sec.title}</h2><span class="pill">${done}/${total}</span>`;
+      card.appendChild(titleRow);
+
+      sec.items.forEach((item, iIndex) => {
+        const row = document.createElement("div");
+        row.className = "item";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = !!item.checked;
+        cb.addEventListener("change", () => {
+          item.checked = cb.checked;
+          saveState(state);
+          render();
+        });
+
+        const txt = document.createElement("div");
+        txt.className = "txt";
+
+        const name = document.createElement("div");
+        name.className = "name";
+        name.textContent = item.name;
+
+        const hint = document.createElement("div");
+        hint.className = "hint";
+        hint.textContent = item.hint || "";
+
+        const noteLabel = document.createElement("div");
+        noteLabel.className = "hint";
+        noteLabel.style.marginTop = "8px";
+        noteLabel.textContent = "Notes (optional):";
+
+        const notes = document.createElement("textarea");
+        notes.placeholder = "E.g., small scratch near handle / stain on carpet, etc.";
+        notes.value = item.notes || "";
+        notes.addEventListener("input", () => {
+          item.notes = notes.value;
+          saveState(state);
+        });
+
+        // Photo capture
+        const photoBtn = document.createElement("button");
+        photoBtn.className = "btn";
+        photoBtn.textContent = item.photos?.length ? `Add photo (${item.photos.length})` : "Add photo";
+
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.capture = "environment";
+        fileInput.style.display = "none";
+
+        photoBtn.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", async () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const dataUrl = await fileToDataURL(file);
+          item.photos = item.photos || [];
+          item.photos.push(dataUrl);
+          saveState(state);
+          render();
+        });
+
+        const photosList = document.createElement("ul");
+        photosList.className = "photo-list";
+        (item.photos || []).forEach((_, idx) => {
+          const li = document.createElement("li");
+          li.innerHTML = `Photo ${idx+1} <button class="btn" style="margin-left:8px;" data-del="${idx}">Remove</button>`;
+          li.querySelector("button").addEventListener("click", () => {
+            item.photos.splice(idx, 1);
+            saveState(state);
+            render();
+          });
+          photosList.appendChild(li);
+        });
+
+        txt.appendChild(name);
+        if (item.hint) txt.appendChild(hint);
+        txt.appendChild(noteLabel);
+        txt.appendChild(notes);
+        if ((item.photos || []).length) txt.appendChild(photosList);
+
+        const right = document.createElement("div");
+        right.appendChild(photoBtn);
+        right.appendChild(fileInput);
+
+        row.appendChild(cb);
+        row.appendChild(txt);
+        row.appendChild(right);
+
+        card.appendChild(row);
+      });
+
+      root.appendChild(card);
+    });
+  }
+
+  function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Buttons
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    syncMetaFromUI();
+    saveState(state);
+    alert("Saved on this phone ✅");
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (!confirm("Reset everything? This clears ticks, notes and photos.")) return;
+    state = defaultState();
+    saveState(state);
+    render();
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    syncMetaFromUI();
+    const report = buildTextReport(state);
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Flat_Checklist_${(state.meta.address || "property").replace(/\s+/g,"_")}_${state.meta.date}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  function buildTextReport(st) {
+    const m = st.meta;
+    const lines = [];
+    lines.push("FLAT CONDITION CHECKLIST (APP EXPORT)");
+    lines.push("");
+    lines.push(`Tenant: ${m.tenantName || "-"}`);
+    lines.push(`Address: ${m.address || "-"}`);
+    lines.push(`Check type: ${m.checkType}`);
+    lines.push(`Date: ${m.date || "-"}`);
+    lines.push(`Meters: ${m.meters || "-"}`);
+    lines.push("");
+    lines.push("General notes:");
+    lines.push(m.generalNotes ? m.generalNotes : "-");
+    lines.push("");
+    st.sections.forEach(sec => {
+      const done = sec.items.filter(i => i.checked).length;
+      lines.push(`== ${sec.title} (${done}/${sec.items.length}) ==`);
+      sec.items.forEach(i => {
+        lines.push(`${i.checked ? "[x]" : "[ ]"} ${i.name}`);
+        if (i.notes && i.notes.trim()) lines.push(`    Notes: ${i.notes.trim()}`);
+        if (i.photos && i.photos.length) lines.push(`    Photos saved in app: ${i.photos.length}`);
+      });
+      lines.push("");
+    });
+    lines.push("End of report.");
+    return lines.join("\n");
+  }
+
+  // Register service worker (offline)
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js");
+    });
+  }
+
+  // Init
+  render();
+</script>
+</body>
+</html>
