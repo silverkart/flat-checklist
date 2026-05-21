@@ -10,9 +10,11 @@ export type Profile = {
 export type MenuItem = {
   id: string
   name: string
-  category: 'antipasti' | 'pasta' | 'secondi' | 'dolci'
-  subtitle: string | null
-  description: string
+  category: 'antipasti' | 'mains' | 'classics' | 'grills' | 'dessert' | 'sides'
+  subtitle: string | null   // ingredient components list
+  description: string       // detailed training explanation
+  sell_line: string | null  // suggested selling line
+  price: string | null
   tags: string[]
   allergens: string[]
   available: boolean
