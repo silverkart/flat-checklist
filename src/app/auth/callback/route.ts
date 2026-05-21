@@ -33,28 +33,22 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth/login?error=auth_failed`)
   }
 
-  // Upsert profile (creates on first login)
+  // Create profile if it doesn't exist yet (email-confirmation flow)
+  const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || ''
   await supabase.from('app_profiles').upsert({
     id: user.id,
-    full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || '',
+    full_name: fullName,
     role: 'staff',
     is_approved: false,
   }, { onConflict: 'id', ignoreDuplicates: true })
 
-  // Check approval status
   const { data: profile } = await supabase
     .from('app_profiles')
     .select('is_approved, role')
     .eq('id', user.id)
     .single()
 
-  if (!profile?.is_approved) {
-    return NextResponse.redirect(`${origin}/auth/pending`)
-  }
-
-  if (profile.role === 'admin' || profile.role === 'manager') {
-    return NextResponse.redirect(`${origin}/admin`)
-  }
-
+  if (!profile?.is_approved) return NextResponse.redirect(`${origin}/auth/pending`)
+  if (profile.role === 'admin' || profile.role === 'manager') return NextResponse.redirect(`${origin}/admin`)
   return NextResponse.redirect(`${origin}/dashboard`)
 }

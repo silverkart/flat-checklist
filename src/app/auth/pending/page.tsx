@@ -32,8 +32,7 @@ export default async function PendingPage() {
             Hi {profile?.full_name || user.email?.split('@')[0]},
           </p>
           <p className="text-gray-500 text-sm mb-5">
-            Your account is registered but needs to be approved by a manager before you can access the portal.
-            You'll receive an email once you're approved.
+            Your account has been created. A manager needs to approve your access before you can use the portal — this is usually done within one working day.
           </p>
           <p className="text-gray-400 text-xs mb-5">{user.email}</p>
           <SignOutButton />
