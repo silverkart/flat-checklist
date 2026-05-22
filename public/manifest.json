@@ -4,8 +4,8 @@
   "description": "Training and resources for Banchory Lodge team members",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a3a2a",
-  "theme_color": "#1a3a2a",
+  "background_color": "#1a6b5a",
+  "theme_color": "#1a6b5a",
   "icons": [
     {
       "src": "/icons/icon-192.png",

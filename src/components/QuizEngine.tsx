@@ -86,7 +86,7 @@ export default function QuizEngine({ questions, moduleSlug, onComplete }: Props)
             <div
               key={i}
               className={`h-1.5 rounded-full w-6 transition-colors ${
-                i < current ? 'bg-forest-500' : i === current ? 'bg-gold-500' : 'bg-gray-200'
+                i < current ? 'bg-teal-500' : i === current ? 'bg-gold-500' : 'bg-gray-200'
               }`}
             />
           ))}
@@ -97,11 +97,11 @@ export default function QuizEngine({ questions, moduleSlug, onComplete }: Props)
 
       <div className="space-y-2 mb-4">
         {q.options.map((opt, idx) => {
-          let cls = 'w-full text-left px-4 py-3 rounded-xl border text-sm transition-all '
+          let cls = 'w-full text-left px-4 py-3 rounded-2xl border text-sm transition-all '
           if (!revealed) {
             cls += selected === idx
-              ? 'border-forest-500 bg-forest-50 text-forest-900'
-              : 'border-gray-200 bg-white hover:border-forest-300'
+              ? 'border-teal-500 bg-teal-50 text-teal-900'
+              : 'border-gray-200 bg-white hover:border-teal-300'
           } else {
             if (idx === q.correct_index) cls += 'border-green-500 bg-green-50 text-green-800'
             else if (idx === selected && idx !== q.correct_index) cls += 'border-red-400 bg-red-50 text-red-800'

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
+  <!-- Stag silhouette -->
+  <g fill="#1a6b5a">
+    <!-- Body -->
+    <ellipse cx="28" cy="38" rx="10" ry="8"/>
+    <!-- Neck -->
+    <rect x="30" y="22" width="6" height="14" rx="3"/>
+    <!-- Head -->
+    <ellipse cx="36" cy="19" rx="5" ry="6"/>
+    <!-- Legs -->
+    <rect x="20" y="44" width="3" height="10" rx="1.5"/>
+    <rect x="26" y="44" width="3" height="12" rx="1.5"/>
+    <rect x="32" y="44" width="3" height="11" rx="1.5"/>
+    <rect x="38" y="44" width="3" height="10" rx="1.5"/>
+    <!-- Antlers -->
+    <path d="M34 14 L31 6 L29 2" stroke="#1a6b5a" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M31 6 L28 4" stroke="#1a6b5a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <path d="M34 14 L37 7 L40 3" stroke="#1a6b5a" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M37 7 L40 6" stroke="#1a6b5a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <!-- Ear -->
+    <ellipse cx="39" cy="16" rx="2.5" ry="3.5" transform="rotate(20 39 16)"/>
+  </g>
+  <!-- Text: BANCHORY LODGE -->
+  <text x="58" y="28" font-family="Georgia, 'Times New Roman', serif" font-size="16" font-weight="700" fill="#1a6b5a" letter-spacing="2">BANCHORY</text>
+  <text x="58" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="400" fill="#1a6b5a" letter-spacing="4">LODGE</text>
+  <!-- Divider lines -->
+  <line x1="58" y1="32" x2="230" y2="32" stroke="#1a6b5a" stroke-width="0.5" opacity="0.4"/>
+</svg>

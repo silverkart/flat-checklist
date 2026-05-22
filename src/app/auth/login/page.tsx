@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -28,23 +29,23 @@ export default function LoginPage() {
       return
     }
 
-    // Let the root page handle the role/approval redirect
     router.push('/')
     router.refresh()
   }
 
   return (
-    <div className="min-h-screen bg-forest-900 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-teal-600 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-gold-500 text-5xl mb-3">🦌</div>
-          <h1 className="text-white text-2xl font-semibold tracking-wide">Banchory Lodge</h1>
-          <p className="text-forest-300 text-sm mt-1">Staff Portal</p>
+          <div className="flex justify-center mb-5">
+            <Image src="/logo.svg" alt="Banchory Lodge" width={200} height={50} className="h-14 w-auto brightness-0 invert" />
+          </div>
+          <p className="text-teal-200 text-sm tracking-widest uppercase font-medium">Staff Portal</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Sign in</h2>
-          <p className="text-gray-400 text-sm mb-5">Welcome back.</p>
+        <div className="bg-white rounded-3xl p-7 shadow-2xl">
+          <h2 className="font-serif text-2xl text-gray-900 mb-1">Welcome back</h2>
+          <p className="text-gray-400 text-sm mb-6">Sign in to your account.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -55,7 +56,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@banchorylodge.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
 
@@ -67,20 +68,20 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
 
-            <button type="submit" disabled={loading} className="btn-primary w-full text-center">
+            <button type="submit" disabled={loading} className="btn-primary w-full mt-2">
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-400 mt-5">
+          <p className="text-center text-sm text-gray-400 mt-6">
             New to the portal?{' '}
-            <Link href="/auth/signup" className="text-forest-700 font-medium hover:underline">
+            <Link href="/auth/signup" className="text-teal-600 font-semibold hover:underline">
               Create an account
             </Link>
           </p>

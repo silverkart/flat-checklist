@@ -23,13 +23,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <NavBar profile={profile as Profile} isAdmin={true} />
       <div className="max-w-4xl mx-auto px-4 py-6">
         <div className="flex gap-1 mb-6 border-b border-gray-200 pb-4">
-          <Link href="/admin" className="px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 text-gray-600 font-medium">
+          <Link href="/admin" className="px-4 py-2 text-sm rounded-full hover:bg-teal-50 text-gray-600 font-medium hover:text-teal-700 transition-colors">
             Overview
           </Link>
-          <Link href="/admin/staff" className="px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 text-gray-600 font-medium">
+          <Link href="/admin/staff" className="px-4 py-2 text-sm rounded-full hover:bg-teal-50 text-gray-600 font-medium hover:text-teal-700 transition-colors">
             Staff
           </Link>
-          <Link href="/admin/modules" className="px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 text-gray-600 font-medium">
+          <Link href="/admin/modules" className="px-4 py-2 text-sm rounded-full hover:bg-teal-50 text-gray-600 font-medium hover:text-teal-700 transition-colors">
             Modules
           </Link>
         </div>

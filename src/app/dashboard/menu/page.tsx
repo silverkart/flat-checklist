@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { MenuItem, QuizQuestion } from '@/lib/types'
 import QuizEngine from '@/components/QuizEngine'
+import Image from 'next/image'
 import Link from 'next/link'
 
 const CATEGORY_LABELS: Record<string, { label: string; italian?: string }> = {
@@ -18,12 +19,9 @@ const CATEGORY_ORDER = ['antipasti', 'mains', 'classics', 'grills', 'dessert', '
 
 function AllergenBadge({ text }: { text: string }) {
   const lower = text.toLowerCase()
-  let cls = 'badge text-xs '
-  if (lower.includes('may contain') || lower.includes('confirm') || lower.includes('optional')) {
-    cls += 'bg-blue-50 text-blue-700'
-  } else {
-    cls += 'bg-red-50 text-red-700'
-  }
+  const cls = lower.includes('may contain') || lower.includes('confirm') || lower.includes('optional')
+    ? 'badge bg-blue-50 text-blue-700'
+    : 'badge bg-red-50 text-red-700'
   return <span className={cls}>{text}</span>
 }
 
@@ -62,17 +60,18 @@ export default function MenuPage() {
 
   return (
     <div>
+      {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <Link href="/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Back</Link>
-        <h2 className="text-xl font-bold text-gray-900">Menu Training</h2>
+        <h2 className="font-serif text-2xl text-gray-900">Menu Training</h2>
       </div>
       <p className="text-gray-500 text-sm mb-5 ml-10">
-        Study each dish — tap to reveal training notes and the suggested sell line. Quiz at the bottom.
+        Tap a dish to reveal training notes, the suggested sell line, and allergens.
       </p>
 
       {progress && (
-        <div className="card mb-4 bg-green-50 border-green-100">
-          <p className="text-sm text-green-700">
+        <div className="card mb-4 bg-teal-50 border-teal-100">
+          <p className="text-sm text-teal-700">
             ✅ Completed — Quiz score: <strong>{progress.score}%</strong> on{' '}
             {new Date(progress.completed_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}
           </p>
@@ -86,23 +85,36 @@ export default function MenuPage() {
             if (!catItems?.length) return null
             const meta = CATEGORY_LABELS[cat]
             return (
-              <div key={cat} className="mb-8">
-                <div className="flex items-baseline gap-3 mb-3">
-                  <h3 className="font-bold text-gray-900">{meta.label}</h3>
+              <div key={cat} className="mb-10">
+                <div className="flex items-baseline gap-3 mb-4">
+                  <h3 className="font-serif text-xl text-gray-900">{meta.label}</h3>
                   {meta.italian && (
-                    <span className="text-xs italic text-gold-600">{meta.italian}</span>
+                    <span className="text-sm italic text-teal-600">{meta.italian}</span>
                   )}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {catItems.map(item => (
-                    <div key={item.id} className="card overflow-hidden">
+                    <div key={item.id} className="card overflow-hidden p-0">
+                      {/* Dish photo — only shown when card is expanded */}
+                      {expanded === item.id && item.image_url && (
+                        <div className="relative w-full h-52">
+                          <Image
+                            src={item.image_url}
+                            alt={item.name}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 672px"
+                          />
+                        </div>
+                      )}
+
                       {/* Header row — always visible */}
                       <div
-                        className="flex items-start justify-between gap-3 cursor-pointer"
+                        className="flex items-start justify-between gap-3 cursor-pointer px-5 py-4"
                         onClick={() => setExpanded(expanded === item.id ? null : item.id)}
                       >
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-semibold text-gray-900 text-sm leading-snug">
                               {item.name}
@@ -111,10 +123,10 @@ export default function MenuPage() {
                               <span className="badge bg-gold-50 text-gold-600 text-xs">Fri & Sat only</span>
                             )}
                             {item.tags?.includes('Vegetarian') && (
-                              <span className="badge bg-green-50 text-green-700 text-xs">V</span>
+                              <span className="badge bg-emerald-50 text-emerald-700 text-xs">V</span>
                             )}
                             {item.tags?.includes('Vegan') && (
-                              <span className="badge bg-green-50 text-green-700 text-xs">VE</span>
+                              <span className="badge bg-emerald-50 text-emerald-700 text-xs">VE</span>
                             )}
                           </div>
                           {item.subtitle && (
@@ -123,7 +135,7 @@ export default function MenuPage() {
                         </div>
                         <div className="flex items-center gap-3 flex-shrink-0">
                           {item.price && (
-                            <span className="text-sm font-semibold text-forest-700">{item.price}</span>
+                            <span className="text-sm font-semibold text-teal-700">{item.price}</span>
                           )}
                           <span className="text-gray-300 text-sm">{expanded === item.id ? '▲' : '▼'}</span>
                         </div>
@@ -131,10 +143,10 @@ export default function MenuPage() {
 
                       {/* Expandable training content */}
                       {expanded === item.id && (
-                        <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
-                          {/* Training description */}
+                        <div className="px-5 pb-5 space-y-4 border-t border-gray-100 pt-4">
+                          {/* Training notes */}
                           <div>
-                            <div className="text-xs font-semibold uppercase tracking-widest text-forest-600 mb-1">
+                            <div className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1.5">
                               Training Notes
                             </div>
                             <p className="text-sm text-gray-700 leading-relaxed">{item.description}</p>
@@ -142,12 +154,12 @@ export default function MenuPage() {
 
                           {/* Sell line */}
                           {item.sell_line && (
-                            <div className="bg-forest-50 border-l-4 border-forest-500 rounded-r-xl px-4 py-3">
-                              <div className="text-xs font-semibold uppercase tracking-widest text-forest-600 mb-1">
+                            <div className="bg-teal-50 border-l-4 border-teal-500 rounded-r-2xl px-4 py-3">
+                              <div className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">
                                 How to sell it
                               </div>
-                              <p className="text-sm italic text-forest-800 leading-relaxed">
-                                {item.sell_line}
+                              <p className="text-sm italic text-teal-800 leading-relaxed">
+                                &ldquo;{item.sell_line}&rdquo;
                               </p>
                             </div>
                           )}
@@ -175,26 +187,26 @@ export default function MenuPage() {
           })}
 
           {questions.length > 0 && (
-            <div className="card border-gold-200 bg-amber-50 mt-4">
-              <h3 className="font-semibold text-gray-900 mb-1">Ready for the quiz?</h3>
-              <p className="text-sm text-gray-500 mb-3">{questions.length} questions · 70% to pass</p>
+            <div className="card border-gold-200 bg-amber-50 mt-4 text-center">
+              <h3 className="font-serif text-xl text-gray-900 mb-1">Ready for the quiz?</h3>
+              <p className="text-sm text-gray-500 mb-4">{questions.length} questions · 70% to pass</p>
               <button onClick={() => setShowQuiz(true)} className="btn-gold">Start quiz</button>
             </div>
           )}
         </>
       ) : (
         <div className="card">
-          <h3 className="font-semibold text-gray-900 mb-4">Menu Quiz</h3>
+          <h3 className="font-serif text-xl text-gray-900 mb-4">Menu Quiz</h3>
           {quizScore !== null ? (
             <div className="text-center py-4">
-              <div className="text-4xl mb-2">{quizScore >= 70 ? '🎉' : '📚'}</div>
-              <p className="font-semibold">{quizScore >= 70 ? 'Passed!' : 'Not quite — keep practising'}</p>
-              <p className="text-gray-500 text-sm mb-4">Score: {quizScore}%</p>
+              <div className="text-5xl mb-3">{quizScore >= 70 ? '🎉' : '📚'}</div>
+              <p className="font-serif text-xl mb-1">{quizScore >= 70 ? 'Passed!' : 'Keep practising'}</p>
+              <p className="text-gray-500 text-sm mb-6">Score: {quizScore}%</p>
               <div className="flex gap-3 justify-center flex-wrap">
-                <button onClick={() => { setShowQuiz(false); setQuizScore(null) }} className="btn-secondary text-sm">
+                <button onClick={() => { setShowQuiz(false); setQuizScore(null) }} className="btn-secondary btn-sm">
                   Review menu
                 </button>
-                <Link href="/dashboard" className="btn-primary text-sm">Back to dashboard</Link>
+                <Link href="/dashboard" className="btn-primary btn-sm">Back to dashboard</Link>
               </div>
             </div>
           ) : (

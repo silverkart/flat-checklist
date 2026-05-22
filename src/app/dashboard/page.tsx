@@ -20,14 +20,14 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Training Dashboard</h2>
+      <div className="mb-7">
+        <h2 className="font-serif text-2xl text-gray-900">Training Dashboard</h2>
         <p className="text-gray-500 text-sm mt-1">
-          {totalDone}/{MODULES.length} modules completed
+          {totalDone} of {MODULES.length} modules completed
         </p>
         <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-forest-600 rounded-full transition-all"
+            className="h-full bg-teal-600 rounded-full transition-all"
             style={{ width: `${(totalDone / MODULES.length) * 100}%` }}
           />
         </div>
@@ -45,17 +45,17 @@ export default async function DashboardPage() {
               href={`/dashboard/${module.slug}`}
               className="card hover:shadow-md transition-shadow group"
             >
-              <div className="flex items-start justify-between">
-                <div className="text-3xl mb-3">{module.icon}</div>
+              <div className="flex items-start justify-between mb-3">
+                <div className="text-3xl">{module.icon}</div>
                 {done ? (
-                  <span className="badge bg-green-100 text-green-700">
+                  <span className="badge bg-teal-50 text-teal-700">
                     {score !== null && score !== undefined ? `${score}%` : '✓'}
                   </span>
                 ) : (
                   <span className="badge bg-amber-50 text-amber-600">Not started</span>
                 )}
               </div>
-              <h3 className="font-semibold text-gray-900 group-hover:text-forest-700 transition-colors">
+              <h3 className="font-serif text-lg text-gray-900 group-hover:text-teal-700 transition-colors">
                 {module.label}
               </h3>
               <p className="text-sm text-gray-400 mt-0.5">

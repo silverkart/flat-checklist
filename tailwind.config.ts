@@ -5,18 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        forest: {
-          50:  '#f0f7f4',
-          100: '#dcede6',
-          200: '#badccf',
-          300: '#8ec3b0',
-          400: '#5ea38e',
-          500: '#3d8772',
-          600: '#2d6c5b',
-          700: '#255549',
-          800: '#1e443b',
-          900: '#1a3a2a',
-          950: '#0d1f17',
+        teal: {
+          50:  '#f0f9f6',
+          100: '#d9f0e9',
+          200: '#b3e1d3',
+          300: '#7ecab8',
+          400: '#47ae97',
+          500: '#2a937e',
+          600: '#1a6b5a',
+          700: '#155548',
+          800: '#124438',
+          900: '#0e3529',
+          950: '#071e17',
         },
         gold: {
           300: '#e8d08a',
@@ -24,9 +24,24 @@ const config: Config = {
           500: '#c9a84c',
           600: '#b8922e',
         },
+        // Keep forest as alias to teal for backwards compat
+        forest: {
+          50:  '#f0f9f6',
+          100: '#d9f0e9',
+          200: '#b3e1d3',
+          300: '#7ecab8',
+          400: '#47ae97',
+          500: '#2a937e',
+          600: '#1a6b5a',
+          700: '#155548',
+          800: '#124438',
+          900: '#0e3529',
+          950: '#071e17',
+        },
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+        serif: ['DM Serif Display', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },
