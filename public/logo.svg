@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 200" fill="none">
+  <!-- BANCHORY in serif caps -->
+  <text
+    x="280" y="90"
+    font-family="Georgia, 'Times New Roman', 'Palatino Linotype', serif"
+    font-size="72"
+    font-weight="400"
+    fill="#2aada0"
+    text-anchor="middle"
+    letter-spacing="8"
+  >BANCHORY</text>
+
+  <!-- Lodge in large italic serif / script style -->
+  <text
+    x="280" y="165"
+    font-family="Georgia, 'Times New Roman', 'Palatino Linotype', serif"
+    font-size="80"
+    font-style="italic"
+    font-weight="400"
+    fill="#2aada0"
+    text-anchor="middle"
+    letter-spacing="2"
+  >Lodge</text>
+
+  <!-- Decorative swoosh / wave line beneath Lodge -->
+  <path
+    d="M 80 178 Q 200 196 280 185 Q 360 174 480 192"
+    stroke="#2aada0"
+    stroke-width="2.5"
+    fill="none"
+    stroke-linecap="round"
+  />
+</svg>
