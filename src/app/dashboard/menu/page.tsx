@@ -89,16 +89,17 @@ export default function MenuPage() {
                 <div className="flex items-baseline gap-3 mb-4">
                   <h3 className="font-serif text-xl text-gray-900">{meta.label}</h3>
                   {meta.italian && (
-                    <span className="text-sm italic text-teal-600">{meta.italian}</span>
+                    <span className="text-sm italic text-teal-500">{meta.italian}</span>
                   )}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {catItems.map(item => (
-                    <div key={item.id} className="card overflow-hidden p-0">
-                      {/* Dish photo — only shown when card is expanded */}
-                      {expanded === item.id && item.image_url && (
-                        <div className="relative w-full h-52">
+                    <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+                      {/* Dish photo — always shown if image exists */}
+                      {item.image_url && (
+                        <div className="relative w-full h-48 sm:h-56">
                           <Image
                             src={item.image_url}
                             alt={item.name}
@@ -109,7 +110,7 @@ export default function MenuPage() {
                         </div>
                       )}
 
-                      {/* Header row — always visible */}
+                      {/* Header row — always visible, tap to expand */}
                       <div
                         className="flex items-start justify-between gap-3 cursor-pointer px-5 py-4"
                         onClick={() => setExpanded(expanded === item.id ? null : item.id)}
@@ -135,7 +136,7 @@ export default function MenuPage() {
                         </div>
                         <div className="flex items-center gap-3 flex-shrink-0">
                           {item.price && (
-                            <span className="text-sm font-semibold text-teal-700">{item.price}</span>
+                            <span className="text-sm font-semibold text-teal-600">{item.price}</span>
                           )}
                           <span className="text-gray-300 text-sm">{expanded === item.id ? '▲' : '▼'}</span>
                         </div>
@@ -146,7 +147,7 @@ export default function MenuPage() {
                         <div className="px-5 pb-5 space-y-4 border-t border-gray-100 pt-4">
                           {/* Training notes */}
                           <div>
-                            <div className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1.5">
+                            <div className="text-xs font-semibold uppercase tracking-widest text-teal-500 mb-1.5">
                               Training Notes
                             </div>
                             <p className="text-sm text-gray-700 leading-relaxed">{item.description}</p>
@@ -154,7 +155,7 @@ export default function MenuPage() {
 
                           {/* Sell line */}
                           {item.sell_line && (
-                            <div className="bg-teal-50 border-l-4 border-teal-500 rounded-r-2xl px-4 py-3">
+                            <div className="bg-teal-50 border-l-4 border-teal-400 rounded-r-2xl px-4 py-3">
                               <div className="text-xs font-semibold uppercase tracking-widest text-teal-600 mb-1">
                                 How to sell it
                               </div>
@@ -167,7 +168,7 @@ export default function MenuPage() {
                           {/* Allergens */}
                           {item.allergens?.length > 0 && (
                             <div>
-                              <div className="text-xs font-semibold uppercase tracking-widest text-red-600 mb-1.5">
+                              <div className="text-xs font-semibold uppercase tracking-widest text-red-500 mb-1.5">
                                 Allergens
                               </div>
                               <div className="flex flex-wrap gap-1.5">
