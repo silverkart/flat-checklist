@@ -1,0 +1,72 @@
+/* ── Layout ─────────────────────────────────────────── */
+.grid { display: grid; gap: var(--gap); }
+.grid--kpi { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.stack > * + * { margin-top: var(--gap); }
+
+/* ── Cards ──────────────────────────────────────────── */
+.card {
+  background: var(--card); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 16px;
+}
+.card__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* ── KPI tile: yesterday · today · tomorrow ─────────── */
+.kpi {
+  background: var(--card); border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  padding: 10px 12px; border-top: 3px solid var(--pine);
+}
+.kpi__label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.kpi__value { font-family: var(--font-head); font-size: 26px; color: var(--pine-dark); line-height: 1.15; }
+.kpi__trio { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.kpi__trio b { color: var(--ink); font-weight: 500; }
+.kpi--gold { border-top-color: var(--gold); }
+
+/* ── Forms ──────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 12px; color: var(--muted); }
+.input, .field input, .field select, .field textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 9px 10px; background: #fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid var(--pine-tint); border-color: var(--pine);
+}
+.field textarea { min-height: 80px; resize: vertical; }
+.field input[readonly] { background: var(--pine-tint); color: var(--pine-dark); font-weight: 500; }
+
+/* Stepper (replaces the old 28-row room table) */
+.stepper { display: flex; align-items: stretch; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; background: #fff; }
+.stepper button { border: 0; width: 44px; background: var(--pine-tint); color: var(--pine-dark); font-size: 18px; cursor: pointer; }
+.stepper button:active { background: var(--pine); color: #fff; }
+.stepper input { border: 0 !important; border-radius: 0 !important; text-align: center; font-weight: 700; }
+
+/* ── Buttons ────────────────────────────────────────── */
+.btn {
+  border: 1px solid var(--line); background: #fff; color: var(--pine-dark);
+  border-radius: var(--radius-sm); padding: 9px 14px; cursor: pointer; font-weight: 500;
+}
+.btn--primary { background: var(--pine); border-color: var(--pine); color: #fff; }
+.btn--gold { background: var(--gold); border-color: var(--gold); color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ── Tables ─────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th, .table td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.table th:first-child, .table td:first-child { text-align: left; }
+.table thead th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 500; }
+.table tfoot td { font-weight: 700; border-top: 2px solid var(--pine); }
+
+/* ── Toast ──────────────────────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 50;
+  background: var(--pine-dark); color: #fff; padding: 10px 16px; border-radius: 999px;
+  box-shadow: var(--shadow); font-size: 13px;
+}
+.toast[data-kind="error"] { background: var(--bad); }
+.print-only { display: none; }

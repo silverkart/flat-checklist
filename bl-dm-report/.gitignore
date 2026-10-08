@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+.wrangler/
+# Sample reports contain real hotel data — keep them local only.
+test-fixtures/*
+!test-fixtures/README.md

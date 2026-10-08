@@ -1,0 +1,23 @@
+/* A4 portrait. Page 1: dashboard. Page 2: weekly stats summary. */
+@page { size: A4 portrait; margin: 10mm; }
+
+html, body { background: #fff !important; font-size: 10.5px; }
+.app-header { position: static; box-shadow: none; background: #fff; color: var(--ink); border-bottom: 2px solid var(--pine); }
+.brand__title { color: var(--pine-dark); }
+.brand__sub { color: var(--muted); }
+
+.no-print, .tabs, .conn-badge, .toast, button, .btn, input, select, textarea, form,
+#panel-today, #panel-lookahead, #panel-admin { display: none !important; }
+
+/* Panels hidden on screen must still print */
+#panel-dashboard, #panel-weekly { display: block !important; }
+#panel-weekly { break-before: page; }
+.print-hide { display: none !important; }
+.print-only { display: block !important; }
+
+.wrap { max-width: none; padding: 6px 0; }
+.card, .kpi { box-shadow: none; border: 1px solid var(--line); break-inside: avoid; }
+.grid--kpi { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.kpi__value { font-size: 18px; }
+
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
